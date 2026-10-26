@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simulateur de Devis UI/UX Design | Lennouille</title>
+<meta name="description" content="Estime le coût de ton projet UI/UX Design en 6 questions simples. Obtient instantanément ta fourchette de prix et un devis PDF par Lennouille, freelance.">
+<meta name="theme-color" content="#134C85">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="StepProgress" id="ProgressBar" role="progressbar" aria-label="Progression du formulaire" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1"></div>
+<div class="app">
+  <nav class="rail" aria-label="Étapes du simulateur">
+    <a class="rail-brand" href="./" aria-label="LennSimu — retour à l’accueil"><img class="mark" src="assets/icon.svg" alt="" width="44" height="44"><span class="LogoTx">LennSimu</span></a>
+    <h4>Ton devis</h4>
+    <ol class="rail-nav" id="rail-nav">
+      <li><button type="button" class="rail-btn" data-step="1"><span class="sn">1</span><span class="lb">Tes informations</span></button></li>
+      <li><button type="button" class="rail-btn" data-step="2"><span class="sn">2</span><span class="lb">Nature du projet</span></button></li>
+      <li><button type="button" class="rail-btn" data-step="3"><span class="sn">3</span><span class="lb">Plateformes cibles</span></button></li>
+      <li><button type="button" class="rail-btn" data-step="4"><span class="sn">4</span><span class="lb">Périmètre du projet</span></button></li>
+      <li><button type="button" class="rail-btn" data-step="5"><span class="sn">5</span><span class="lb">Livrables attendus</span></button></li>
+      <li><button type="button" class="rail-btn" data-step="6"><span class="sn">6</span><span class="lb">Contraintes</span></button></li>
+    </ol>
+    <div class="rail-end"><span id="rail-st">Étape 1 / 6</span></div>
+  </nav>
+
+  <main class="workspace" id="main">
+    <div class="simu-grid">
+      <section class="Form">
+        <header class="PageHead">
+          <span class="Eyebrow">Lennouille — Génére ton devis en 5 clics</span>
+          <h1 class="MainTitle">Estime ton projet<br><span class="Accent">en moins de 5 minutes.</span></h1>
+          <p class="MainDesc">Réponds à 6 questions pour recevoir une estimation personnalisée et ton devis complet par email.</p>
+        </header>
+        <div class="card FormCard">
+          <div class="Steps">
+                  <div class="Panel" data-step="1">
+                      <div class="StepHead">
+                          <span class="StepLabel">Étape 1 / 6</span>
+                          <h2 class="StepTitle">Tes informations</h2>
+                          <p class="StepDesc">Pour personnaliser et te transmettre ton devis.</p>
+                      </div>
+                      <div class="FormGrid">
+                          <div class="InputGroup">
+                              <input class="Input" type="text" id="prenom" name="prenom" autocomplete="given-name">
+                              <label class="Label" for="prenom">Ton prénom</label>
+                              <span class="Error" id="err-prenom" aria-describedby="err-prenom">Ce champ est requis.</span>
+                          </div>
+                          <div class="InputGroup">
+                              <input class="Input" type="text" id="nom" name="nom" autocomplete="family-name">
+                              <label class="Label" for="nom">Ton nom</label>
+                              <span class="Error" id="err-nom" aria-describedby="err-nom">Ce champ est requis.</span>
+                          </div>
+                          <div class="InputGroup ColFull">
+                              <input class="Input" type="email" id="email" name="email" autocomplete="email">
+                              <label class="Label" for="email">Ton email</label>
+                              <span class="Error" id="err-email" aria-describedby="err-prenom">Saisis un email valide.</span>
+                          </div>
+                          <div class="InputGroup">
+                              <input class="Input" type="text" id="entreprise" name="entreprise" autocomplete="organization">
+                              <label class="Label" for="entreprise">Ton entreprise <span class="Accent">*</span></label>
+                          </div>
+                          <div class="InputGroup">
+                              <input class="Input" type="text" id="role" name="role" autocomplete="organization-title">
+                              <label class="Label" for="role">Ton rôle <span class="Accent">*</span></label>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="Panel" data-step="2">
+                      <div class="StepHead">
+                          <span class="StepLabel">Étape 2 / 6</span>
+                          <h2 class="StepTitle">Nature du projet</h2>
+                          <p class="StepDesc">Quel est le cœur de ton besoin ?</p>
+                      </div>
+                      <div class="ChoiceList">
+                          <div class="ChoiceCard">
+                              <input type="radio" name="nature" id="n-creation" value="creation">
+                              <label for="n-creation">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Product Design : création de A à Z</div>
+                                      <div class="LabelSub">Conception UX/UI complète d'un nouveau produit digital</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="radio" name="nature" id="n-refonte" value="refonte">
+                              <label for="n-refonte">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Refonte UI / UX complète</div>
+                                      <div class="LabelSub">Optimisation ergonomique et refonte visuelle d'une interface existante.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="radio" name="nature" id="n-ds" value="design-system">
+                              <label for="n-ds">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="3" rx="1.5"/><rect width="7" height="7" x="14" y="14" rx="1.5"/><rect width="7" height="7" x="3" y="14" rx="1.5"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Design System & UI Kit</div>
+                                      <div class="LabelSub">Création d'une bibliothèque de composants visuels scalables et documentés.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="radio" name="nature" id="n-features" value="features">
+                              <label for="n-features">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Conception de nouvelles features</div>
+                                      <div class="LabelSub">Intégration de nouveaux parcours utilisateurs sur un produit en production.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="radio" name="nature" id="n-audit" value="audit">
+                              <label for="n-audit">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Audit UX & Évaluation heuristique</div>
+                                      <div class="LabelSub">Analyse des frictions, tests des parcours et recommandations expertes.</div>
+                                  </div>
+                              </label>
+                          </div>
+                      </div>
+                      <span class="Error" id="err-nature" aria-describedby="err-nature">Sélectionnes une option.</span>
+                  </div>
+                  <div class="Panel" data-step="3">
+                      <div class="StepHead">
+                          <span class="StepLabel">Étape 3 / 6</span>
+                          <h2 class="StepTitle">Plateformes cibles</h2>
+                          <p class="StepDesc">Sur quels supports ton produit sera-t-il utilisé ?
+                              <span class="Accent">Tu peux en choisir plusieurs</span>
+                          </p>
+                      </div>
+                      <div class="ChoiceList">
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="plateformes" id="p-vitrine" value="vitrine">
+                              <label for="p-vitrine">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="M2 8h20"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Site vitrine / Landing page</div>
+                                      <div class="LabelSub">Présence web institutionnelle ou page optimisée pour la conversion.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="plateformes" id="p-ecom" value="ecommerce">
+                              <label for="p-ecom">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Plateforme E-commerce</div>
+                                      <div class="LabelSub">Parcours d'achat, catalogue et tunnel de conversion (Checkout).</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="plateformes" id="p-mobile" value="mobile">
+                              <label for="p-mobile">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Application Mobile (Native / PWA)</div>
+                                      <div class="LabelSub">Design respectant les guidelines iOS (Human Interface) et Android (Material Design).</div>
+                                  </div>
+                              </label>
+                          </div>
+                      </div>
+                      <span class="Error" id="err-plateformes" aria-describedby="err-plateformes">Sélectionnes au moins une option.</span>
+                  </div>
+                  <div class="Panel" data-step="4">
+                      <div class="StepHead">
+                          <span class="StepLabel">Étape 4 / 6</span>
+                          <h2 class="StepTitle">Périmètre du projet</h2>
+                          <p class="StepDesc">Combien d'écrans / vues sont à concevoir ?</p>
+                      </div>
+                      <div class="ChoiceList">
+                          <div class="ChoiceCard">
+                              <input type="radio" name="perimetre" id="per-small" value="small">
+                              <label for="per-small">
+                                  <div class="LabelIcon LabelIconText">S</div>
+                                  <div>
+                                      <div class="LabelMain">1 à 5 écrans (Scope réduit)</div>
+                                      <div class="LabelSub">Minimum Viable Product (MVP), flux simple ou micro-application.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="radio" name="perimetre" id="per-medium" value="medium">
+                              <label for="per-medium">
+                                  <div class="LabelIcon LabelIconText">M</div>
+                                  <div>
+                                      <div class="LabelMain">5 à 15 écrans (Produit standard)</div>
+                                      <div class="LabelSub">Application ou plateforme avec plusieurs User Flows croisés.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="radio" name="perimetre" id="per-large" value="large">
+                              <label for="per-large">
+                                  <div class="LabelIcon LabelIconText">L</div>
+                                  <div>
+                                      <div class="LabelMain">+15 vues (Écosystème complexe)</div>
+                                      <div class="LabelSub">Produit complet, logiciel métier, SaaS ou Dashboard approfondi.</div>
+                                  </div>
+                              </label>
+                          </div>
+                      </div>
+                      <span class="Error" id="err-perimetre" aria-describedby="err-perimetre">Sélectionnes une option.</span>
+                  </div>
+                  <div class="Panel" data-step="5">
+                      <div class="StepHead">
+                          <span class="StepLabel">Étape 5 / 6</span>
+                          <h2 class="StepTitle">Livrables attendus</h2>
+                          <p class="StepDesc">Quels livrables souhaites-tu inclure ?
+                              <span class="Accent">Tu peux en choisir plusieurs</span>
+                          </p>
+                      </div>
+                      <div class="ChoiceList">
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="livrables" id="l-wires" value="wireframes">
+                              <label for="l-wires">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Wireframes</div>
+                                      <div class="LabelSub">Définition de l'architecture de l'information et du zoning des vues.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard Locked" id="card-l-ui">
+                              <input type="checkbox" name="livrables" id="l-ui" value="maquettes" checked>
+                              <label for="l-ui">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="13" height="13" x="8" y="8" rx="2"/><path d="M4 16V4a2 2 0 0 1 2-2h12"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Maquettes UI (haute-fidélité) <span class="LockBadge">Compris</span></div>
+                                      <div class="LabelSub">Interfaces "pixel-perfect", application de la typographie, grille et couleurs.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="livrables" id="l-proto" value="prototype">
+                              <label for="l-proto">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Prototype interactif</div>
+                                      <div class="LabelSub">Câblage des parcours et micro-interactions sur Figma pour tests utilisateurs.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="livrables" id="l-recherche" value="recherche">
+                              <label for="l-recherche">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">UX Research</div>
+                                      <div class="LabelSub">Entretiens utilisateurs, création de Personas et Customer Journey Maps.</div>
+                                  </div>
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="livrables" id="l-flows" value="userflows">
+                              <label for="l-flows">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">User Flows & Arborescence</div>
+                                      <div class="LabelSub">Cartographie logique des étapes de navigation de l'utilisateur.</div>
+                                  </div>  
+                              </label>
+                          </div>
+                          <div class="ChoiceCard">
+                              <input type="checkbox" name="livrables" id="l-handoff" value="handoff">
+                              <label for="l-handoff">
+                                  <div class="LabelIcon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+                                  <div>
+                                      <div class="LabelMain">Documentation & Handoff Développeurs</div>
+                                      <div class="LabelSub">Spécifications UI, Design Tokens et export des assets pour l'intégration tech.</div>
+                                  </div>
+                              </label>
+                          </div>
+                      </div>
+                      <span class="Error" id="err-livrables" aria-describedby="err-livrables">Sélectionnes au moins un livrable.</span>
+                  </div>
+                  <div class="Panel" data-step="6">
+                      <div class="StepHead">
+                          <span class="StepLabel">Étape 6 / 6</span>
+                          <h2 class="StepTitle">Contraintes</h2>
+                          <p class="StepDesc">Dernière étape — définis tes contraintes.</p>
+                      </div>
+                      <div class="FormGroup">
+                          <label class="Label" for="description_projet">Décris ton projet</label>
+                          <textarea class="Input" id="description_projet" name="description_projet" placeholder="Ex: Nous cherchons à réduire le taux d'abandon lors de l'onboarding de notre application FinTech..." rows="5" maxlength="2000"></textarea>
+                      </div>
+                      <div class="UrgenceCard">
+                          <div class="UrgenceRow">
+                              <div>
+                                  <div class="UrgenceLabel">Délai standard ou urgent ?</div>
+                                  <div class="UrgenceDesc">Une livraison urgente entraîne une majoration de
+                                      <span class="Accent">+20%</span> sur le prix mais réduit ton délai de
+                                      <span class="Accent">40%</span>
+                                  </div>
+                              </div>
+                              <div class="Toggle">
+                                  <input type="checkbox" id="urgence" name="urgence" aria-label="Activer le mode urgent">
+                              </div>
+                          </div>
+                          <div class="BadgeRow">
+                              <span id="Standard" class="Badge Standard">Standard</span>
+                              <span id="Urgent" class="Badge Urgent Hidden"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Urgent</span>
+                          </div>
+                      </div>
+                      <!-- <div class="FormGroup">
+                          <label class="Label" for="budget">Fourchette de budget envisagée</label>
+                          <select id="budget" name="budget" class="Input">
+                              <option value="" disabled selected>— Sélectionnes une fourchette —</option>
+                              <option value="moins-5k">Moins de 5 000 €</option>
+                              <option value="5k-10k">5 000 € — 10 000 €</option>
+                              <option value="10k-20k">10 000 € — 20 000 €</option>
+                              <option value="20k-50k">20 000 € — 50 000 €</option>
+                              <option value="plus-50k">Plus de 50 000 €</option>
+                              <option value="a-definir">Budget à définir ensemble</option>
+                          </select>
+                      </div> -->
+                      <div class="FormGroup">
+                          <label class="Label" for="code_parrainage">Code de parrainage (optionnel)</label>
+                          <input class="Input" type="text" id="code_parrainage" name="code_parrainage" placeholder="Saisis ton code pour appliquer ta remise" autocomplete="off" maxlength="20">
+                          <div class="CodeFeedback" id="code-feedback"></div>
+                      </div>
+                      <div class="RadioBlock">
+                          <div class="Title">Type de demande</div>
+                          <div class="RadioList">
+                              <label class="RadioItem">
+                                  <input type="radio" name="type_demande" value="estimation" checked>
+                                  <div>
+                                      <div class="RadioItemMain">Estimation immédiate</div>
+                                      <div class="RadioItemSub">Recois une fourchette de prix par email</div>
+                                  </div>
+                              </label>
+                              <label class="RadioItem">
+                                  <input type="radio" name="type_demande" value="devis_officiel">
+                                  <div>
+                                      <div class="RadioItemMain">Devis officiel avec signature</div>
+                                      <div class="RadioItemSub">Recois un devis officiel à signer via Yousign</div>
+                                  </div>
+                              </label>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          <div class="FormNav">
+                  <button class="BtnGhost" type="button" id="btn-prev" onclick="navigate(-1)"><span class="Arrow">←</span> Précédent</button>
+                  <button class="ArrowBtn" type="button" id="btn-next" onclick="navigate(1)">Continuer <span class="Arrow">→</span></button>
+              </div>
+              <p class="NavError" id="nav-error" role="alert">Complète les champs surlignés ci-dessus pour continuer.</p>
+        </div>
+      </section>
+      <aside id="PriceSidebar" class="card" aria-label="Estimation du prix">
+          <div class="PriceHeader">
+              <div class="SidebarEyebrow">Ton estimation</div>
+              <div class="PriceDisplay PriceGradient" id="s-price-main">— €</div>
+              <div class="PriceNote">Fourchette HT (hors taxes)</div>
+          </div>
+          <div class="Breakdown">
+              <div class="BreakdownEyebrow">Détail du calcul</div>
+              <div id="s-breakdown">
+                  <div class="BreakdownPlaceholder">Complète le formulaire...</div>
+              </div>
+          </div>
+          <div class="PriceTable">
+              <div class="PriceRow">
+                  <span class="Label">Montant HT min.</span>
+                  <span class="Value" id="s-ht-min">—</span>
+              </div>
+              <div class="PriceRow">
+                  <span class="Label">Montant HT max.</span>
+                  <span class="Value" id="s-ht-max">—</span>
+              </div>
+              <div class="PriceRow Hidden" id="s-remise-row">
+                  <span class="Label">Remise parrainage</span>
+                  <span class="Value" id="s-remise-val">—</span>
+              </div>
+              <div class="PriceRow">
+                  <span class="Label" id="s-tva-label">TVA : 0%</span>
+                  <span class="Value" id="s-tva-val">—</span>
+              </div>
+              <div class="Separator"></div>
+              <div class="PriceTotalRow">
+                  <span class="TotalLabel">Estimation TTC</span>
+                  <span class="TotalValue" id="s-ttc">—</span>
+              </div>
+          </div>
+          <div class="DaysNote">
+              <span id="s-jours">—</span> jours estimés · TJM <span id="s-tjm-val">—</span> €/j
+          </div>
+      </aside>
+    </div>
+  </main>
+</div>
+
+<div id="MobileDrawerOverlay" onclick="closeMobileDrawer()"></div>
+<div id="MobileDrawer">
+    <div id="MobileDrawerHandle" onclick="closeMobileDrawer()">
+        <div class="DrawerPill"></div>
+    </div>
+    <div class="DrawerContent">
+        <div class="DrawerHeader">
+            <div class="Estimation">Estimation en temps réel</div>
+            <div class="Title" id="md-price-main">— €</div>
+            <div class="PriceNote">Fourchette HT (hors taxes)</div>
+        </div>
+        <div class="SectionLabel">Détail du calcul</div>
+        <div id="md-breakdown">
+            <div class="BreakdownPlaceholder">Complète le formulaire...</div>
+        </div>
+        <div class="SectionLabel">Récapitulatif</div>
+        <div class="PriceTable">
+            <div class="PriceRow">
+                <span class="Label">Montant HT min.</span>
+                <span class="Value" id="md-ht-min">—</span>
+            </div>
+            <div class="PriceRow">
+                <span class="Label">Montant HT max.</span>
+                <span class="Value" id="md-ht-max">—</span>
+            </div>
+            <div class="PriceRow">
+                <span class="Label" id="md-tva-label">TVA</span>
+                <span class="Value" id="md-tva-val">—</span>
+            </div>
+            <div class="Separator"></div>
+            <div class="PriceTotalRow">
+                <span class="TotalLabel">Estimation TTC</span>
+                <span class="TotalValue" id="md-ttc">—</span>
+            </div>
+        </div>
+        <div class="DaysNote">
+            <span id="md-jours">—</span> jours estimés · TJM <span id="md-tjm-val">—</span> €/j
+        </div>
+    </div>
+</div>
+<div id="MobileBar" onclick="toggleMobileDrawer()">
+    <div class="MobileBarInner">
+        <div>
+            <div class="Label">Estimation HT</div>
+            <div class="Price" id="m-price-main">— €</div>
+        </div>
+        <div class="PriceNote">
+            <div class="Label">TTC estimé</div>
+            <div class="MobileTTC" id="m-ttc">—</div>
+        </div>
+        <div class="Hint">
+            <span class="Arrow">↑</span>
+            <span class="Label">Détails</span>
+        </div>
+    </div>
+</div>
+<div id="ModalSuccess" class="Hidden">
+    <div class="Card">
+        <div class="ModalIcon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M5 14L11.5 20.5L23 8" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h3 class="ModalTitle">Devis envoyé !</h3>
+        <p class="ModalDesc" id="modal-msg">Ta demande a bien été enregistrée.</p>
+        <div class="ModalActions">
+            <button class="BtnMain" onclick="downloadPDF()">↓ Télécharger le PDF</button>
+            <button class="BtnGhost" onclick="resetForm()">Nouveau devis</button>
+        </div>
+    </div>
+</div>
+<div class="ToastContainer" id="ToastContainer" role="region" aria-live="assertive" aria-atomic="true"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="guard.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

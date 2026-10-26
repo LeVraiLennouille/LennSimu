@@ -1,0 +1,259 @@
+/* LennSimu — DA alignée sur LennAudits / LennOutils (Syne, pilules, cartes 20px, fond beige, thème auto clair/sombre) — accent bleu #134C85 */
+:root{
+  --Primary:#134C85;--PrimaryRGB:19,76,133;--DarkPrimary:#0B3260;
+  --Charcoal:#1c1c1e;--Success:#22c55e;--Danger:#e53e3e;
+  --Bg:#e8e2d8;--Card:#fff;--Tx:#1c1c1e;--Mu:#3B3B3B;--MinMuted:#777;--Borders:#d4cdc4;--DarkBorders:#b8b1a8;
+  --Link:#134C85;--Ring:#134C85;--Soft:rgba(19,76,133,.2);--Faint:rgba(19,76,133,.07);
+  --Shadow:0 4px 24px rgba(0,0,0,.06);--Nav:#fff;
+  --DangerTx:#c53030;--OkTx:#15803D;--WarnTx:#B45309;
+  --PriceGrad:linear-gradient(135deg,#134C85,#0B3260);
+  --font:"Syne",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media(prefers-color-scheme:dark){:root{--Bg:#141416;--Card:#232326;--Tx:#f3efe8;--Mu:#c9c4bb;--MinMuted:#9a958d;--Borders:#3a3a3e;--DarkBorders:#4a4a4f;--Link:#7FB2EA;--Ring:#7FB2EA;--Soft:rgba(19,76,133,.45);--Faint:rgba(19,76,133,.22);--Shadow:0 4px 24px rgba(0,0,0,.35);--Nav:#1b1b1e;--DangerTx:#fc8181;--OkTx:#4ade80;--WarnTx:#FBBF24;--PriceGrad:linear-gradient(135deg,#9CC6F2,#5E9BDB)}}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--Bg);color:var(--Tx);font:15px/1.55 var(--font);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--Tx)}
+svg{display:block}
+::selection{background:var(--Primary);color:#fff}
+:is(input,textarea,select,button,a):focus-visible{outline:2px solid var(--Ring);outline-offset:2px}
+.Hidden{display:none!important}
+.Accent{color:var(--Link)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
+
+/* ---------- Progression (barre fine en haut) ---------- */
+.StepProgress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(to right,var(--DarkPrimary),var(--Primary));z-index:1100;pointer-events:none;transition:width .4s ease}
+@media(prefers-color-scheme:dark){.StepProgress{background:linear-gradient(to right,var(--Primary),var(--Link))}}
+
+/* ---------- Structure : barre latérale + contenu ---------- */
+.app{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:100vh}
+.rail{position:sticky;top:0;height:100vh;height:100dvh;align-self:start;z-index:1000;display:flex;flex-direction:column;gap:2px;overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(20px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px));background:var(--Nav);box-shadow:rgba(0,0,0,.15) 2.4px 2.4px 3.2px}
+a.rail-brand{display:flex;align-items:center;gap:10px;padding:0 8px 12px;color:var(--Link);font-weight:800;font-size:1.15rem;text-decoration:none;flex:none}
+.rail-brand .mark{width:44px;height:44px;border-radius:12px;display:block;flex:none;object-fit:cover}
+.rail h4{margin:18px 14px 4px;font-size:.72rem;font-weight:800;text-transform:uppercase;color:var(--Link)}
+.rail-nav{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.rail-btn{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:8px 16px;border:0;border-radius:999px;background:none;font-weight:600;color:var(--Link);transition:background .2s}
+.rail-btn .sn{display:flex;align-items:center;justify-content:center;flex:none;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-size:.72rem;font-weight:800;line-height:1}
+.rail-btn .lb{font-size:.95rem;line-height:1.2}
+.rail-btn:hover:not(:disabled){background:var(--Soft)}
+.rail-btn:disabled{opacity:.45;cursor:not-allowed}
+.rail-btn.Done .sn{background:var(--Primary);border-color:var(--Primary);color:#fff}
+.rail-btn[aria-current="step"]{background:linear-gradient(135deg,var(--Primary),var(--DarkPrimary));color:#fff;font-weight:700;opacity:1}
+.rail-btn[aria-current="step"] .sn{border-color:#fff;color:#fff}
+.rail-end{margin-top:auto;padding:16px 8px 0;font-size:.75rem;color:var(--MinMuted)}
+
+.workspace{min-width:0;max-width:1240px;padding:clamp(28px,4vw,56px) clamp(16px,4vw,48px)}
+.simu-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;align-items:start}
+.Form{min-width:0}
+
+/* ---------- En-tête de page ---------- */
+.PageHead{margin-bottom:32px;max-width:720px}
+.Eyebrow{display:block;font-size:.82rem;font-weight:800;text-transform:uppercase;color:var(--Link);margin-bottom:12px}
+.MainTitle{font-size:clamp(1.8rem,3.6vw,2.6rem);font-weight:800;line-height:1.15}
+.MainDesc{margin-top:12px;color:var(--Mu);max-width:60ch}
+
+/* ---------- Cartes ---------- */
+.card{background:var(--Card);border:1px solid var(--Borders);border-radius:20px;box-shadow:var(--Shadow)}
+.FormCard{padding:28px}
+
+/* ---------- Étapes ---------- */
+.Panel{display:none}
+.Panel.Active{display:block;animation:fadeUp .3s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.StepHead{margin-bottom:24px}
+.StepLabel{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;color:var(--Link);margin-bottom:6px}
+.StepTitle{font-size:1.4rem;font-weight:800;line-height:1.2}
+.StepDesc{margin-top:6px;color:var(--Mu)}
+.StepDesc .Accent{font-weight:700}
+
+/* Champs à label flottant */
+.FormGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 16px}
+.InputGroup{position:relative;min-width:0}
+.InputGroup.ColFull{grid-column:1/-1}
+.Input{display:block;width:100%;padding:13px 16px;border:1px solid var(--Borders);border-radius:12px;background:var(--Card);color:var(--Tx);font-size:1rem;transition:border-color .15s,box-shadow .15s}
+.Input:hover{border-color:var(--MinMuted)}
+.Input:focus,.Input.HasValue{border-color:var(--Primary)}
+.Input:focus{outline:none;box-shadow:0 0 0 3px var(--Soft)}
+@media(prefers-color-scheme:dark){.Input:focus,.Input.HasValue{border-color:var(--Ring)}}
+textarea.Input{resize:vertical;min-height:120px;line-height:1.5}
+.InputGroup .Label{position:absolute;left:12px;top:50%;transform:translateY(-50%);padding:0 6px;color:var(--MinMuted);pointer-events:none;transition:all .2s ease;white-space:nowrap}
+.InputGroup .Input:focus~.Label,.InputGroup .Input.HasValue~.Label{top:0;padding:2px 10px;border-radius:999px;background:var(--Primary);color:#fff;font-size:.72rem;font-weight:700}
+.InputGroup .Input:focus~.Label .Accent,.InputGroup .Input.HasValue~.Label .Accent{color:#fff}
+.InputGroup:has(.Error.Show) .Input{border-color:var(--Danger);box-shadow:0 0 0 3px rgba(229,62,62,.12)}
+.InputGroup:has(.Error.Show) .Label{color:var(--DangerTx)}
+.InputGroup:has(.Error.Show) .Input:focus~.Label,.InputGroup:has(.Error.Show) .Input.HasValue~.Label{background:var(--Danger);color:#fff}
+.Error{display:none;margin-top:6px;font-size:.8rem;font-weight:600;color:var(--DangerTx)}
+.Error.Show{display:block}
+
+.FormGroup{margin-bottom:20px}
+.FormGroup>.Label{display:block;font-size:.85rem;font-weight:700;color:var(--Mu);margin-bottom:6px}
+.CodeFeedback{display:none;margin-top:7px;font-size:.8rem;font-weight:700}
+.CodeFeedback.Show{display:block}
+.CodeFeedback.Valid{color:var(--OkTx)}
+.CodeFeedback.Invalid{color:var(--DangerTx)}
+
+/* Cartes de choix */
+.ChoiceList{display:flex;flex-direction:column;gap:10px}
+.ChoiceCard{position:relative}
+.ChoiceCard input[type="radio"],.ChoiceCard input[type="checkbox"]{position:absolute;opacity:0;width:0;height:0}
+.ChoiceCard label{display:flex;align-items:center;gap:14px;padding:14px 18px;border:1px solid var(--Borders);border-radius:16px;background:var(--Card);cursor:pointer;user-select:none;transition:border-color .2s,background .2s,box-shadow .2s,transform .2s}
+.ChoiceCard label:hover{border-color:var(--Primary);background:var(--Faint);transform:translateY(-2px);box-shadow:var(--Shadow)}
+.ChoiceCard label::after{content:"";margin-left:auto;flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--DarkBorders);transition:all .2s}
+.ChoiceCard input[type="checkbox"]+label::after{border-radius:6px}
+.ChoiceCard input:checked+label{border-color:var(--Primary);background:var(--Faint)}
+.ChoiceCard input:checked+label::after{background-color:var(--Primary);border-color:var(--Primary);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+.ChoiceCard input:focus-visible+label{outline:2px solid var(--Ring);outline-offset:2px}
+.ChoiceCard.Locked label{cursor:default}
+.ChoiceCard.Locked label:hover{transform:none}
+.LabelIcon{display:flex;align-items:center;justify-content:center;flex:none;width:40px;height:40px;border-radius:12px;background:var(--Soft);color:var(--Link);transition:background .2s,color .2s}
+.LabelIcon svg{width:19px;height:19px;stroke:currentColor}
+.ChoiceCard label:hover .LabelIcon{background:var(--Soft)}
+.ChoiceCard input:checked+label .LabelIcon{background:linear-gradient(135deg,var(--Primary),var(--DarkPrimary));color:#fff}
+.LabelMain{font-weight:700;font-size:.95rem;line-height:1.3}
+.LabelSub{margin-top:2px;font-size:.82rem;color:var(--Mu)}
+.LockBadge{display:inline-flex;align-items:center;margin-left:8px;padding:2px 8px;border-radius:999px;background:var(--Soft);color:var(--Link);font-size:.65rem;font-weight:800;text-transform:uppercase;vertical-align:middle;line-height:1.3}
+
+/* Urgence */
+.UrgenceCard{padding:20px;margin-bottom:20px;border:1px solid var(--Borders);border-radius:16px;background:var(--Card)}
+.UrgenceRow{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.UrgenceLabel{font-weight:800;margin-bottom:3px}
+.UrgenceDesc{font-size:.85rem;color:var(--Mu)}
+.UrgenceDesc .Accent{font-weight:800}
+.Toggle input[type="checkbox"]{position:relative;display:block;flex:none;width:50px;height:28px;margin:0;appearance:none;-webkit-appearance:none;border-radius:999px;background:var(--DarkBorders);cursor:pointer;transition:background .25s}
+.Toggle input[type="checkbox"]::after{content:"";position:absolute;top:4px;left:4px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .25s}
+.Toggle input[type="checkbox"]:checked{background:var(--Primary)}
+.Toggle input[type="checkbox"]:checked::after{left:26px}
+.BadgeRow{display:flex;align-items:center;gap:8px;margin-top:16px}
+.Badge{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:5px 14px;border-radius:999px;font-size:.78rem;font-weight:700;border:1px solid transparent}
+.Badge svg{width:13px;height:13px;stroke:currentColor}
+.Badge.Standard{background:var(--Soft);color:var(--Link)}
+.Badge.Urgent{background:rgba(245,158,11,.18);color:var(--WarnTx);border-color:rgba(245,158,11,.4)}
+
+/* Type de demande */
+.RadioBlock{margin-bottom:4px}
+.RadioBlock .Title{margin-bottom:8px;font-size:.72rem;font-weight:800;text-transform:uppercase;color:var(--Link)}
+.RadioList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.RadioItem{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border:1px solid var(--Borders);border-radius:12px;background:var(--Card);cursor:pointer;transition:border-color .15s,background .15s}
+.RadioItem:hover{border-color:var(--Primary);background:var(--Faint)}
+.RadioItem:has(input:checked){border-color:var(--Primary);background:var(--Faint)}
+.RadioItem input{flex:none;width:18px;height:18px;margin:2px 0 0;accent-color:var(--Primary)}
+.RadioItemMain{font-weight:700}
+.RadioItemSub{margin-top:2px;font-size:.8rem;color:var(--Mu)}
+
+/* ---------- Boutons (pilules) ---------- */
+.FormNav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid var(--Borders)}
+.ArrowBtn,.BtnMain{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 24px;background:var(--Primary);color:#fff;font-weight:800;border:1.5px solid var(--Primary);border-radius:999px;transition:background-color .3s,color .3s,box-shadow .3s}
+.ArrowBtn:hover,.BtnMain:hover{background:#fff;color:var(--Primary);box-shadow:0 8px 20px rgba(var(--PrimaryRGB),.3)}
+.BtnGhost{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border:1px solid var(--Borders);border-radius:999px;background:transparent;color:var(--Mu);font-weight:500;transition:all .15s}
+.BtnGhost:hover{border-color:var(--Primary);color:var(--Link);background:var(--Soft)}
+.Arrow{display:inline-block;transition:transform .3s}
+.ArrowBtn:hover .Arrow{transform:translateX(3px)}
+.BtnGhost:hover .Arrow{transform:translateX(-3px)}
+.NavError{display:none;margin-top:14px;padding:10px 16px;border-radius:12px;border:1px solid rgba(229,62,62,.3);background:rgba(229,62,62,.1);color:var(--DangerTx);font-size:.85rem;font-weight:600}
+.NavError.Show{display:block}
+
+/* ---------- Estimation (colonne de droite) ---------- */
+#PriceSidebar{position:sticky;top:24px;padding:24px;max-height:calc(100vh - 48px);max-height:calc(100dvh - 48px);overflow-y:auto}
+.PriceHeader{margin-bottom:18px}
+.SidebarEyebrow,.BreakdownEyebrow,.SectionLabel{font-size:.72rem;font-weight:800;text-transform:uppercase;color:var(--Link)}
+.PriceDisplay{margin-top:6px;font-size:clamp(1.7rem,2.4vw,2.1rem);font-weight:900;line-height:1.15;overflow-wrap:anywhere}
+.PriceGradient{background:var(--PriceGrad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.PriceNote{margin-top:4px;font-size:.78rem;color:var(--MinMuted)}
+.Breakdown{margin-bottom:18px}
+.BreakdownEyebrow{margin-bottom:6px}
+.BreakdownPlaceholder{font-size:.85rem;color:var(--MinMuted);font-style:italic}
+.Details{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--Borders);font-size:.82rem}
+.Details:last-child{border-bottom:0}
+.DetailsLabel{color:var(--Mu)}
+.DetailsValue{flex:none;font-weight:700;color:var(--Tx);text-align:right}
+.DetailsValue--multiplicateur{color:var(--WarnTx)}
+.DetailsValue--urgence{color:var(--DangerTx)}
+.DetailsValue--remise{color:var(--OkTx)}
+.PriceTable{padding:16px;border-radius:16px;background:var(--Faint);border:1px solid var(--Soft)}
+.PriceRow{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:4px 0;font-size:.85rem}
+.PriceRow .Label{color:var(--Mu)}
+.PriceRow .Value{font-weight:700;text-align:right}
+.Separator{height:1px;margin:10px 0;background:var(--Soft)}
+.PriceTotalRow{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px}
+.TotalLabel{font-weight:800;white-space:nowrap}
+.TotalValue{margin-left:auto;font-size:1.05rem;font-weight:900;color:var(--Link);text-align:right}
+.DaysNote{margin-top:14px;font-size:.8rem;color:var(--MinMuted);text-align:center}
+
+/* ---------- Mobile : barre d'estimation + tiroir ---------- */
+#MobileBar,#MobileDrawer,#MobileDrawerOverlay{display:none}
+#MobileDrawerOverlay{position:fixed;inset:0;z-index:1150;background:rgba(20,20,22,.55);opacity:0;pointer-events:none;transition:opacity .3s}
+#MobileDrawerOverlay.Open{opacity:1;pointer-events:auto}
+#MobileDrawer{position:fixed;left:0;right:0;bottom:0;z-index:1200;max-height:82vh;max-height:82dvh;overflow-y:auto;border-radius:20px 20px 0 0;background:var(--Card);border:1px solid var(--Borders);border-bottom:0;box-shadow:0 -12px 40px rgba(0,0,0,.25);transform:translateY(105%);transition:transform .35s cubic-bezier(.22,1,.36,1);padding-bottom:env(safe-area-inset-bottom,0px)}
+#MobileDrawer.Open{transform:none}
+#MobileDrawerHandle{display:flex;justify-content:center;padding:12px 0 4px;cursor:pointer}
+.DrawerPill{width:42px;height:5px;border-radius:99px;background:var(--DarkBorders)}
+.DrawerContent{padding:8px 22px 24px}
+.DrawerHeader{margin-bottom:18px}
+.DrawerHeader .Estimation{font-size:.72rem;font-weight:800;text-transform:uppercase;color:var(--Link)}
+.DrawerHeader .Title{margin-top:4px;font-size:1.9rem;font-weight:900;line-height:1.15;color:var(--Link)}
+.SectionLabel{margin:16px 0 6px}
+#MobileBar{position:fixed;left:0;right:0;bottom:0;z-index:1050;background:var(--Nav);border-top:1px solid var(--Borders);box-shadow:0 -4px 20px rgba(0,0,0,.12);padding-bottom:env(safe-area-inset-bottom,0px);cursor:pointer}
+.MobileBarInner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px max(16px,env(safe-area-inset-left,0px)) 12px max(16px,env(safe-area-inset-right,0px))}
+.MobileBarInner .Label{font-size:.68rem;font-weight:800;text-transform:uppercase;color:var(--MinMuted)}
+.MobileBarInner .Price{font-size:1.15rem;font-weight:900;color:var(--Link)}
+.MobileBarInner .PriceNote{margin:0;text-align:right}
+.MobileBarInner .MobileTTC{font-size:.85rem;font-weight:700}
+.MobileBarInner .Hint{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--Link);font-size:.7rem;font-weight:700}
+
+/* ---------- Modale de confirmation ---------- */
+#ModalSuccess{position:fixed;inset:0;z-index:1400;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(20,20,22,.55)}
+#ModalSuccess .Card{width:min(440px,100%);padding:32px 28px;border-radius:20px;background:var(--Card);border:1px solid var(--Borders);box-shadow:0 24px 64px rgba(0,0,0,.35);text-align:center;animation:fadeUp .3s ease both}
+.ModalIcon{display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:0 auto 16px;border-radius:50%;background:rgba(34,197,94,.16)}
+.ModalIcon path{stroke:var(--OkTx)}
+.ModalTitle{font-size:1.5rem;font-weight:800}
+.ModalDesc{margin-top:8px;color:var(--Mu)}
+.ModalActions{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:24px}
+
+/* ---------- Toast d'erreur ---------- */
+.ToastContainer{position:fixed;right:24px;bottom:24px;z-index:1500;display:flex;flex-direction:column;gap:10px;width:min(380px,calc(100vw - 48px));pointer-events:none}
+.Toast{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-radius:14px;background:var(--Card);border:1px solid rgba(229,62,62,.3);border-left:3px solid var(--Danger);box-shadow:0 12px 32px rgba(0,0,0,.18);pointer-events:auto;animation:ToastIn .35s cubic-bezier(.22,1,.36,1)}
+.Toast.ToastOut{animation:ToastOut .25s ease forwards}
+.ToastIcon{flex:none;width:20px;height:20px;color:var(--Danger)}
+.ToastBody{flex:1;min-width:0}
+.ToastTitle{margin-bottom:3px;font-size:.85rem;font-weight:800}
+.ToastMessage{font-size:.82rem;line-height:1.5;color:var(--Mu)}
+.ToastClose{flex:none;margin:-2px -2px 0 0;padding:2px 6px;border:0;background:none;font-size:1.2rem;line-height:1;color:var(--MinMuted);transition:color .2s}
+.ToastClose:hover{color:var(--Tx)}
+@keyframes ToastIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes ToastOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(8px) scale(.98)}}
+
+/* ---------- Responsive ---------- */
+/* Sous 1180px : l'estimation passe dans la barre du bas + tiroir */
+@media(max-width:1179px){
+  .simu-grid{grid-template-columns:minmax(0,1fr)}
+  #PriceSidebar{display:none}
+  #MobileBar,#MobileDrawer,#MobileDrawerOverlay{display:block}
+  .workspace{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .ToastContainer{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+}
+/* Sous 860px : la barre latérale devient une barre d'onglets horizontale */
+@media(max-width:860px){
+  .app{display:block}
+  .rail{position:sticky;top:0;height:auto;flex-direction:row;align-items:center;gap:6px;overflow-x:auto;overflow-y:hidden;padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .rail h4,.LogoTx,.rail-end{display:none}
+  a.rail-brand{padding:0 6px 0 0}
+  .rail-nav{flex-direction:row;gap:6px;flex:none}
+  .rail-btn{width:auto;white-space:nowrap;padding:7px 14px;gap:8px}
+  .rail-btn .lb{font-size:.88rem}
+}
+@media(max-width:600px){
+  .FormCard{padding:20px 16px}
+  .FormGrid{grid-template-columns:1fr}
+  .RadioList{grid-template-columns:1fr}
+  .ChoiceCard label{padding:12px 14px;gap:12px}
+  .UrgenceRow{align-items:flex-start}
+  .FormNav .BtnGhost,.FormNav .ArrowBtn{padding:11px 18px}
+  .ToastContainer{right:16px;width:calc(100vw - 32px)}
+  .Input,textarea.Input{font-size:16px}
+}
+@media(pointer:coarse){.rail-btn,.ArrowBtn,.BtnGhost,.BtnMain{min-height:44px}}
