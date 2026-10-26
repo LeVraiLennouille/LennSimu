@@ -1,4 +1,4 @@
-/* LennSimu — DA alignée sur LennAudits / LennOutils (Syne, pilules, cartes 20px, fond beige, thème auto clair/sombre) — accent bleu #134C85 */
+@font-face {font-family: "Syne";src: url("assets/Syne.ttf") format("truetype");}
 :root{
   --Primary:#134C85;--PrimaryRGB:19,76,133;--DarkPrimary:#0B3260;
   --Charcoal:#1c1c1e;--Success:#22c55e;--Danger:#e53e3e;
