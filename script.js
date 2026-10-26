@@ -9,11 +9,11 @@ const CONFIG = {
     FREELANCE: {
         nom: 'Lenny Gadroy',
         titre: 'Lennouille — UI/UX Designer',
-        email: 'contact@levrailennouille.fr',
+        email: 'contact@lennouille.fr',
         tel: '+33 6 52 51 49 19',
-        siret: '000 000 000 00000',
+        siret: '945 152 791 00022',
         adresse: '51100 Reims, France',
-        site: 'levrailennouille.fr',
+        site: 'lennouille.fr',
         tva_intra: 'FR00000000000',
     },
 // ► Estimated days
