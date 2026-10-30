@@ -86,7 +86,7 @@ const Guard = (() => {
         toast.className = 'Toast';
         toast.setAttribute('role', 'alert');
         toast.innerHTML = `
-            <svg class="ToastIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <svg class="ToastIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
             <div class="ToastBody">
                 <div class="ToastTitle"></div>
                 <div class="ToastMessage"></div>

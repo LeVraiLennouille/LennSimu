@@ -24,9 +24,9 @@ Tous les chemins sont relatifs : le dossier peut aussi être ouvert en local ou 
 
 - Tarifs, TVA, codes de parrainage, coordonnées du devis, Formspree : bloc `CONFIG` en haut de `script.js`.
 - Mots interdits : tableau `BANNED_WORDS` en haut de `guard.js`.
-- Couleur d'accent : variables `--Primary`, `--PrimaryRGB`, `--DarkPrimary` en haut de `style.css`
+- Couleur d'accent : bloc « ACCENT » en haut de `style.css` (`--Primary`, `--PrimaryRGB`, `--DarkPrimary`, `--LinkLight`, `--LinkDark`) ; le reste du fichier jusqu'à « fin du socle commun » est le socle de DA partagé avec LennAudits et LennOutils
   (la couleur du bandeau du PDF se règle dans `downloadPDF()` : `C.PRIMARY`).
 
 ## Dépendance externe
 
-La génération du PDF charge jsPDF 2.5.1 depuis cdnjs, et la police Syne vient de Google Fonts (comme LennAudits).
+La génération du PDF charge jsPDF 2.5.1 depuis cdnjs, et la police Syne est servie en local (`fonts/Syne.ttf`).

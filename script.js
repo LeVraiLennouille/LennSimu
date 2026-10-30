@@ -369,6 +369,8 @@ function updateProgressBar(current) {
         bar.setAttribute('aria-valuenow', current);
     }
     setText('rail-st', `Étape ${current} / ${total}`);
+    const curLb = document.querySelector(`#rail-nav .rail-btn[data-step="${current}"] .lb`);
+    if (curLb) setText('page-eyebrow', curLb.textContent);
 
     const rail = document.querySelector('.rail');
     const active = document.querySelector('#rail-nav .rail-btn[aria-current="step"]');
