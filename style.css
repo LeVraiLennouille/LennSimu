@@ -200,6 +200,18 @@ dialog.Modal::backdrop{background:var(--Scrim)}
 }
 /* ===== fin du socle commun ===== */
 
+/* ---------- Reprise de saisie, rendez-vous, anti-spam ---------- */
+.hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.ResumeBar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;margin:0 0 20px;padding:16px 20px;border:1px solid var(--Borders);border-left:4px solid var(--Primary);border-radius:var(--R3);background:var(--Card)}
+.ResumeBar p{margin:0;flex:1 1 260px}
+.ResumeActs{display:flex;flex-wrap:wrap;gap:8px}
+.ResumeActs .BtnMain,.ResumeActs .BtnGhost{padding:9px 18px;font-size:.85rem}
+.ModalRef{margin-top:12px;font-size:.8rem;font-weight:700;color:var(--MinMuted)}
+.ModalRef:empty{display:none}
+.SideRdv{display:block;margin-top:12px;text-align:center;font-size:.85rem;font-weight:700;color:var(--Link);text-decoration:none}
+.SideRdv:hover{text-decoration:underline}
+.RdvLink.Hidden{display:none}
+
 /* =====================================================================
    COMPOSANTS PROPRES À LennSimu
    ===================================================================== */

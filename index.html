@@ -54,6 +54,10 @@
           <h1 class="MainTitle">Estime ton projet<br><span class="Accent">en moins de 5 minutes.</span></h1>
           <p class="MainDesc">Réponds à 6 questions pour recevoir une estimation personnalisée et ton devis complet par email.</p>
         </header>
+        <div class="ResumeBar Hidden" id="ResumeBar" role="status">
+          <p>Tu avais commencé une demande le <b id="resume-date"></b>. Veux-tu la reprendre ?</p>
+          <div class="ResumeActs"><button type="button" class="BtnMain" id="resume-yes">Reprendre</button><button type="button" class="BtnGhost" id="resume-no">Recommencer</button></div>
+        </div>
         <div class="card FormCard">
           <div class="Steps">
                   <div class="Panel" data-step="1">
@@ -368,6 +372,7 @@
                       </div>
                   </div>
               </div>
+          <div class="hp" aria-hidden="true"><label>Ne pas remplir ce champ<input type="text" id="_gotcha" name="_gotcha" tabindex="-1" autocomplete="off"></label></div>
           <div class="FormNav">
                   <button class="BtnGhost" type="button" id="btn-prev" onclick="navigate(-1)"><span class="Arrow">←</span> Précédent</button>
                   <button class="ArrowBtn" type="button" id="btn-next" onclick="navigate(1)">Continuer <span class="Arrow">→</span></button>
@@ -413,6 +418,7 @@
           <div class="DaysNote">
               <span id="s-jours">—</span> jours estimés · TJM <span id="s-tjm-val">—</span> €/j
           </div>
+          <a class="RdvLink SideRdv Hidden" id="s-rdv" href="https://lennouille.fr/contact" target="_blank" rel="noopener">Discuter de ce projet →</a>
       </aside>
     </div>
     <footer class="SiteFoot"><a href="https://lennouille.fr/" target="_blank" rel="noopener">lennouille.fr</a><nav aria-label="Autres outils Lennouille"><a href="https://audits.lennouille.fr/" target="_blank" rel="noopener">Auditeur</a><a href="https://outils.lennouille.fr/" target="_blank" rel="noopener">Atelier</a></nav></footer>
@@ -457,6 +463,7 @@
         <div class="DaysNote">
             <span id="md-jours">—</span> jours estimés · TJM <span id="md-tjm-val">—</span> €/j
         </div>
+        <a class="RdvLink SideRdv Hidden" id="md-rdv" href="https://lennouille.fr/contact" target="_blank" rel="noopener">Discuter de ce projet →</a>
     </div>
 </div>
 <div id="MobileBar" onclick="toggleMobileDrawer()">
@@ -484,8 +491,10 @@
         </div>
         <h3 class="ModalTitle">Devis envoyé !</h3>
         <p class="ModalDesc" id="modal-msg">Ta demande a bien été enregistrée.</p>
+        <p class="ModalRef" id="modal-ref"></p>
         <div class="ModalActions">
-            <button class="BtnMain" onclick="downloadPDF()">↓ Télécharger le PDF</button>
+            <a class="BtnMain RdvLink" id="modal-rdv" href="https://lennouille.fr/contact" target="_blank" rel="noopener">Prendre rendez-vous</a>
+            <button class="BtnGhost" onclick="downloadPDF()">↓ Télécharger le PDF</button>
             <button class="BtnGhost" onclick="resetForm()">Nouveau devis</button>
         </div>
     </div>

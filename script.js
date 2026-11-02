@@ -66,7 +66,32 @@ const CONFIG = {
 // ► Rate limiting
     RATE_LIMIT_MAX: 3,
     RATE_LIMIT_WINDOW_MS: 15 * 60 * 1000,
+// ► Anti-spam (en plus de la limite d'envoi) : champ piège + durée minimale de saisie
+    MIN_FILL_MS: 8000,
+// ► Prise de rendez-vous (proposée après l'estimation)
+    RDV_URL: 'https://lennouille.fr/contact',
+// ► Reprise de saisie (brouillon enregistré dans le navigateur)
+    SAVE_KEY: 'lennsimuBrouillon',
+    SAVE_TTL_MS: 30 * 24 * 60 * 60 * 1000,
 };
+
+const PAGE_OPENED = Date.now();
+
+/* Référence de devis : DEV-AAAAMMJJ-XXXX, générée une seule fois à l'envoi puis partagée
+   par le PDF, l'e-mail reçu et la fenêtre de confirmation. */
+function newDevis() {
+    const now = new Date();
+    const alpha = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    const rnd = crypto.getRandomValues(new Uint8Array(4));
+    const code = [...rnd].map(b => alpha[b % alpha.length]).join('');
+    const ymd = now.toISOString().slice(0, 10).replace(/-/g, '');
+    const fin = new Date(now.getTime() + CONFIG.VALIDITE_DEVIS_JOURS * 86400000);
+    return {
+        numero: `DEV-${ymd}-${code}`,
+        date: now.toISOString(),
+        validiteLisible: fin.toLocaleDateString('fr-FR'),
+    };
+}
 
 let STATE = {
     currentStep: 1,
@@ -300,6 +325,7 @@ function showStep(n) {
         if (parseInt(el.dataset.step) === n) el.classList.add('Active');
     });
     STATE.currentStep = n;
+    saveProgress();
 
     const btnPrev = document.getElementById('btn-prev');
     btnPrev.style.visibility = n === 1 ? 'Hidden' : 'visible';
@@ -380,6 +406,7 @@ function updateProgressBar(current) {
 }
 
 function updatePriceUI() {
+    document.querySelectorAll('.RdvLink').forEach(a => a.classList.toggle('Hidden', !(STATE.estimation.prixHtMax > 0)));
     const est = STATE.estimation;
     if (est.prixHtMin === 0 && est.prixHtMax === 0) return;
 
@@ -559,12 +586,13 @@ function downloadPDF() {
     const d = STATE.data;
     const est = STATE.estimation;
     const fl = CONFIG.FREELANCE;
-    const now  = new Date();
+    const now  = STATE.devis ? new Date(STATE.devis.date) : new Date();
     const W = 210;
 
-    const numDevis = `DEV-${Date.now()}`;
+    if (!STATE.devis) STATE.devis = newDevis();
+    const numDevis = STATE.devis.numero;
     const dateEmission = now.toLocaleDateString('fr-FR');
-    const dateValidite = new Date(now.getTime() + CONFIG.VALIDITE_DEVIS_JOURS * 86400000).toLocaleDateString('fr-FR');
+    const dateValidite = STATE.devis.validiteLisible;
 
     const C = {
         NOIR: [0, 0, 0],
@@ -744,12 +772,27 @@ async function submitForm() {
         return;
     }
 
+    // Anti-spam : champ piège rempli => robot présumé, succès simulé sans rien envoyer.
+    const trap = document.getElementById('_gotcha');
+    if (trap && trap.value.trim() !== '') {
+        console.info('ℹ Envoi ignoré (anti-spam)');
+        STATE.devis = newDevis();
+        showSuccess();
+        return;
+    }
+    // Saisie anormalement rapide (sauf reprise d'un brouillon) : on demande de réessayer.
+    if (!STATE.resumed && Date.now() - PAGE_OPENED < CONFIG.MIN_FILL_MS) {
+        Guard.showToast('Merci de patienter quelques secondes avant d\'envoyer ta demande.', 'Envoi trop rapide');
+        return;
+    }
+
     const waitMinutes = devisRateLimiter.isLimited();
     if (waitMinutes !== null) {
         Guard.showToast(`Tu as atteint la limite de ${CONFIG.RATE_LIMIT_MAX} demandes. Merci de réessayer dans ${waitMinutes} minute${waitMinutes > 1 ? 's' : ''}.`, 'Trop de demandes');
         return;
     }
     devisRateLimiter.record();
+    STATE.devis = newDevis();
 
     recalculate();
 
@@ -764,14 +807,109 @@ async function submitForm() {
         sendToFormspree(payload).then(r => { if (!r.success) console.warn('⚠ Formspree non envoyé :', r.reason || r.error); }),
     ]);
 
+    showSuccess();
+}
+
+function showSuccess() {
     const modal = document.getElementById('ModalSuccess');
     const msg  = document.getElementById('modal-msg');
+    const ref  = document.getElementById('modal-ref');
     const d = STATE.data;
 
     if (d.type_demande === 'devis_officiel') {msg.textContent = `Ta demande de devis officiel a été enregistrée. Tu recevra un document à signer via Yousign à l'adresse ${d.email}.`;}
     else {msg.textContent = `Ton estimation personnalisée a été enregistrée. Tu vas recevoir ton devis à l'adresse ${d.email}.`;}
+    if (ref && STATE.devis) ref.textContent = `Devis n° ${STATE.devis.numero} · valable jusqu'au ${STATE.devis.validiteLisible}`;
 
+    STATE.submitted = true;
+    clearProgress();
     modal.classList.remove('Hidden');
+}
+
+/* ---------- Reprise de saisie ---------- */
+function readFormData() {
+    const d = {...STATE.data};
+    d.prenom = v('prenom'); d.nom = v('nom'); d.email = v('email'); d.entreprise = v('entreprise'); d.role = v('role');
+    d.nature = document.querySelector('input[name="nature"]:checked')?.value || '';
+    d.plateformes = [...document.querySelectorAll('input[name="plateformes"]:checked')].map(el => el.value);
+    d.perimetre = document.querySelector('input[name="perimetre"]:checked')?.value || '';
+    d.livrables = [...document.querySelectorAll('input[name="livrables"]:checked')].map(el => el.value);
+    d.urgence = !!document.getElementById('urgence')?.checked;
+    d.type_demande = document.querySelector('input[name="type_demande"]:checked')?.value || 'estimation';
+    d.code_parrainage = v('code_parrainage');
+    d.description_projet = v('description_projet');
+    return d;
+}
+
+let saveTimer = null;
+function saveProgress() {
+    if (STATE.holdSave || STATE.submitted) return;
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+        const d = readFormData();
+        const started = d.prenom || d.nom || d.email || d.entreprise || d.role || d.nature || d.plateformes.length || d.perimetre || d.description_projet;
+        try {
+            if (!started) {localStorage.removeItem(CONFIG.SAVE_KEY); return;}
+            localStorage.setItem(CONFIG.SAVE_KEY, JSON.stringify({v: 1, t: Date.now(), step: STATE.currentStep, data: d}));
+        } catch (e) {}
+    }, 400);
+}
+
+function clearProgress() {
+    clearTimeout(saveTimer);
+    try {localStorage.removeItem(CONFIG.SAVE_KEY);} catch (e) {}
+}
+
+function loadProgress() {
+    try {
+        const s = JSON.parse(localStorage.getItem(CONFIG.SAVE_KEY));
+        if (!s || s.v !== 1 || !s.data || Date.now() - s.t > CONFIG.SAVE_TTL_MS) {clearProgress(); return null;}
+        return s;
+    } catch (e) {return null;}
+}
+
+function applyProgress(s) {
+    const d = s.data || {};
+    ['prenom', 'nom', 'email', 'entreprise', 'role', 'description_projet', 'code_parrainage'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {el.value = typeof d[id] === 'string' ? d[id] : ''; el.classList.toggle('HasValue', el.value.trim() !== '');}
+    });
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(el => {
+        if (el.name === 'nature') el.checked = el.value === d.nature;
+        else if (el.name === 'perimetre') el.checked = el.value === d.perimetre;
+        else if (el.name === 'plateformes') el.checked = (d.plateformes || []).includes(el.value);
+        else if (el.name === 'livrables') el.checked = (d.livrables || []).includes(el.value);
+        else if (el.name === 'type_demande') el.checked = el.value === (d.type_demande || 'estimation');
+    });
+    const urg = document.getElementById('urgence');
+    if (urg) {
+        urg.checked = !!d.urgence;
+        document.getElementById('Standard').classList.toggle('Hidden', urg.checked);
+        document.getElementById('Urgent').classList.toggle('Hidden', !urg.checked);
+    }
+    STATE.data = readFormData();
+    syncMaquetteInclusion();
+    STATE.data = readFormData();
+    if (typeof updateCodeFeedback === 'function') updateCodeFeedback();
+    recalculate();
+    STATE.resumed = true;
+    const step = Math.min(Math.max(parseInt(s.step, 10) || 1, 1), STATE.totalSteps);
+    showStep(step);
+}
+
+function initResume() {
+    const bar = document.getElementById('ResumeBar');
+    const saved = loadProgress();
+    if (!bar || !saved) return;
+    STATE.holdSave = true;
+    const dt = new Date(saved.t).toLocaleDateString('fr-FR', {day: 'numeric', month: 'long'});
+    document.getElementById('resume-date').textContent = dt;
+    bar.classList.remove('Hidden');
+    document.getElementById('resume-yes').addEventListener('click', () => {
+        bar.classList.add('Hidden'); STATE.holdSave = false; applyProgress(saved);
+    });
+    document.getElementById('resume-no').addEventListener('click', () => {
+        bar.classList.add('Hidden'); STATE.holdSave = false; clearProgress();
+    });
 }
 
 async function sendToFormspree(payload) {
@@ -787,6 +925,8 @@ async function sendToFormspree(payload) {
 
     const flat = {
         numero_devis:   m.numero_devis,
+        date_validite:  m.date_validite,
+        temps_saisie_s: m.temps_saisie_s,
         date:           m.date_lisible,
         type_demande:   m.type_demande === 'devis_officiel' ? 'Devis officiel' : 'Estimation',
         prenom:         d.prenom,
@@ -831,12 +971,15 @@ async function sendToFormspree(payload) {
 function buildPayload() {
     const d = STATE.data;
     const est = STATE.estimation;
-    const now = new Date();
+    if (!STATE.devis) STATE.devis = newDevis();
+    const now = new Date(STATE.devis.date);
 
     return {
 
         meta: {
-            numero_devis: `DEV-${Date.now()}`,
+            numero_devis: STATE.devis.numero,
+            date_validite: STATE.devis.validiteLisible,
+            temps_saisie_s: Math.round((Date.now() - PAGE_OPENED) / 1000),
             date_soumission: now.toISOString(),
             date_lisible: now.toLocaleDateString('fr-FR'),
             type_demande: d.type_demande,
@@ -926,6 +1069,8 @@ async function sendToWebhook(payload) {
 
 function resetForm() {
     document.getElementById('ModalSuccess').classList.add('Hidden');
+    STATE.devis = null; STATE.submitted = false; STATE.resumed = false; STATE.holdSave = false;
+    clearProgress();
 
     STATE.currentStep = 1;
     STATE.data = {
@@ -1007,6 +1152,10 @@ function resetForm() {
 
 document.addEventListener('DOMContentLoaded', () => {buildProgressBar();
 showStep(1);
+document.querySelectorAll('.RdvLink').forEach(a => {a.href = CONFIG.RDV_URL;});
+document.addEventListener('input', saveProgress);
+document.addEventListener('change', saveProgress);
+initResume();
 
 function syncHasValue(el) {
     el.classList.toggle('HasValue', el.value.trim() !== '');
